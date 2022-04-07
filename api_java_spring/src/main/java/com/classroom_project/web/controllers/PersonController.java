@@ -1,7 +1,7 @@
 package com.classroom_project.web.controllers;
 
-import java.util.List;
 import com.classroom_project.domain.dto.StudentDTO;
+import com.classroom_project.domain.dto.TeacherDTO;
 import com.classroom_project.domain.services.PersonService;
 import com.classroom_project.persistence.entities.Student;
 import com.classroom_project.persistence.entities.Teacher;
@@ -26,8 +26,8 @@ public class PersonController {
 
     //-----Students-----
     @GetMapping("/students")
-    public List<Student> getAllStudents() {
-        return service.getAllStudents();
+    public ResponseEntity<?> getAllStudents() {
+        return new ResponseEntity<>(service.getAllStudents(), HttpStatus.OK);
     }
 
     @GetMapping("/students/{id}")
@@ -37,34 +37,37 @@ public class PersonController {
     }
 
     @PostMapping("/students")
-    public Student save(@RequestBody Student s) {
-        return service.saveStudent(s);
+    public ResponseEntity<?> save(@RequestBody Student s) {
+        return new ResponseEntity<>(service.saveStudent(s), HttpStatus.CREATED);
     }
 
     //-----Teachers-----
     @GetMapping("/teachers")
-    public List<Teacher> getAllTeachers() {
-        return service.getAllTeachers();
+    public ResponseEntity<?> getAllTeachers() {
+        return new ResponseEntity<>(service.getAllTeachers(), HttpStatus.OK);
     }
 
     @GetMapping("/teachers/{id}")
-    public Teacher getTeacher(@PathVariable("id") long id) {
-        return service.getTeacher(id);
+    public ResponseEntity<?> getTeacher(@PathVariable("id") long id) {
+        TeacherDTO dto = service.getTeacher(id);
+        return dto != null ? new ResponseEntity<>(dto, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/teachers")
-    public Teacher save(@RequestBody Teacher t) {
-        return service.saveTeacher(t);
+    public ResponseEntity<?> save(@RequestBody Teacher t) {
+        return new ResponseEntity<>(service.saveTeacher(t), HttpStatus.CREATED);
     }
 
     //-----AUTH-----
     @PostMapping("/auth/students")
     public Object loginStudent(@RequestParam("email") String email, @RequestParam("password") String password) {
-        return service.loginStudent(email, password);
+        StudentDTO dto = service.loginStudent(email, password);
+        return dto != null ? new ResponseEntity<>(dto, HttpStatus.ACCEPTED) : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PostMapping("/auth/teachers")
     public Object loginTeacher(@RequestParam("email") String email, @RequestParam("password") String password) {
-        return service.loginTeacher(email, password);
+        TeacherDTO dto = service.loginTeacher(email, password);
+        return dto != null ? new ResponseEntity<>(dto, HttpStatus.ACCEPTED) : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
