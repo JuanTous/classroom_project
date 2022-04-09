@@ -59,15 +59,9 @@ public class PersonController {
     }
 
     //-----AUTH-----
-    @PostMapping("/auth/students")
-    public Object loginStudent(@RequestParam("email") String email, @RequestParam("password") String password) {
-        StudentDTO dto = service.loginStudent(email, password);
-        return dto != null ? new ResponseEntity<>(dto, HttpStatus.ACCEPTED) : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-    }
-
-    @PostMapping("/auth/teachers")
-    public Object loginTeacher(@RequestParam("email") String email, @RequestParam("password") String password) {
-        TeacherDTO dto = service.loginTeacher(email, password);
-        return dto != null ? new ResponseEntity<>(dto, HttpStatus.ACCEPTED) : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    @PostMapping("/auth")
+    public Object login(@RequestParam("email") String email, @RequestParam("password") String password) {
+        Object obj = service.login(email, password);
+        return obj != null ? new ResponseEntity<>(obj, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -11,10 +11,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ProgramMapper {
 
-    ProgramDTO toDTO(Program p);
+    ProgramDTO toDTO(Program e);
     @InheritInverseConfiguration
     Program toEntity(ProgramDTO dto);
     List<ProgramDTO> toDTOList(List<Program> ls);
     @InheritInverseConfiguration
-    List<Program> toList(List<ProgramDTO> lsDTO);
+    List<Program> toEntityList(List<ProgramDTO> ls);
 }

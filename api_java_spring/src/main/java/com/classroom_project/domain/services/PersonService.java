@@ -70,13 +70,14 @@ public class PersonService {
     }
 
     //-----AUTH-----
-    public StudentDTO loginStudent(String email, String password) {
-        Student student = repoStudent.login(email, password);
-        return mapperStudent.toDTO(student);
-    }
-
-    public TeacherDTO loginTeacher(String email, String password) {
-        Teacher teacher = repoTeacher.login(email, password);
-        return mapperTeacher.toDTO(teacher);
+    public Object login(String email, String password) {
+        Student s = repoStudent.login(email, password);
+        if (s == null) {
+            Teacher t = repoTeacher.login(email, password);
+            return t != null ? mapperTeacher.toDTO(t) : null;
+        } else {
+            return s != null ? mapperStudent.toDTO(s) : null;
+        }
+        
     }
 }

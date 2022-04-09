@@ -16,5 +16,5 @@ public interface StudentMapper {
     Student toEntity(StudentDTO dto);
     List<StudentDTO> toDTOList(List<Student> ls);
     @InheritInverseConfiguration
-    List<Student> toList(List<StudentDTO> lsDTO);
+    List<Student> toEntityList(List<StudentDTO> ls);
 }
