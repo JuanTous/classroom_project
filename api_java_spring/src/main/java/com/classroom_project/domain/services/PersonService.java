@@ -6,6 +6,7 @@ import com.classroom_project.domain.dto.StudentDTO;
 import com.classroom_project.persistence.entities.Student;
 import com.classroom_project.persistence.entities.Teacher;
 import com.classroom_project.persistence.mapper.StudentMapper;
+import com.classroom_project.persistence.mapper.TeacherMapper;
 import com.classroom_project.persistence.repositories.StudentRepository;
 import com.classroom_project.persistence.repositories.TeacherRepository;
 
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class PersonService {
     @Autowired
     private StudentMapper mapperStudent;
+    @Autowired
+    private TeacherMapper mapperTeacher;
     @Autowired
     private StudentRepository repoStudent;
     @Autowired
@@ -49,13 +52,14 @@ public class PersonService {
     }
 
     //-----AUTH-----
-    public Student loginStudent(String email, String password) {
+    public Object login(String email, String password) {
         Student s = repoStudent.login(email, password);
-        return s;
-    }
-
-    public Teacher loginTeacher(String email, String password) {
-        Teacher t = repoTeacher.login(email, password);
-        return t;
+        if (s == null) {
+            Teacher t = repoTeacher.login(email, password);
+            return t != null ? mapperTeacher.toDto(t) : null;
+        } else {
+            return s != null ? mapperStudent.toDto(s) : null;
+        }
+        
     }
 }

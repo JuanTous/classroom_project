@@ -1,5 +1,7 @@
 package com.classroom_project.persistence.mapper;
 
+import java.util.List;
+
 import com.classroom_project.domain.dto.StudentDTO;
 import com.classroom_project.persistence.entities.Student;
 
@@ -9,7 +11,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", uses = {ProgramMapper.class})
 public interface StudentMapper {
 
-    StudentDTO toDto(Student s);
+    StudentDTO toDto(Student e);
     @InheritInverseConfiguration
-    Student toStudent(StudentDTO dto);
+    Student toEntity(StudentDTO dto);
+    List<StudentDTO> toDTOList(List<Student> ls);
+    @InheritInverseConfiguration
+    List<Student> toEntityList(List<StudentDTO> ls);
 }

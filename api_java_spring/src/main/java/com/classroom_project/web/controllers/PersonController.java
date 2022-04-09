@@ -8,6 +8,7 @@ import com.classroom_project.persistence.entities.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/people")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PersonController {
     @Autowired
     private PersonService service;
@@ -56,13 +58,9 @@ public class PersonController {
     }
 
     //-----AUTH-----
-    @PostMapping("/auth/students")
-    public Object loginStudent(@RequestParam("email") String email, @RequestParam("password") String password) {
-        return service.loginStudent(email, password);
-    }
-
-    @PostMapping("/auth/teachers")
-    public Object loginTeacher(@RequestParam("email") String email, @RequestParam("password") String password) {
-        return service.loginTeacher(email, password);
+    @PostMapping("/auth")
+    public Object login(@RequestParam("email") String email, @RequestParam("password") String password) {
+        Object obj = service.login(email, password);
+        return obj != null ? new ResponseEntity<>(obj, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
