@@ -1,22 +1,23 @@
 import React from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+import { useNavigate } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 const Login = () => {
   const [user, setUser] = useState({email : "", password : ""})
   const [loading, setloading] = useState(false)
   const [error, setError] = useState("")
+  const navigate = useNavigate();
 
-  /*useEffect(() => {
-    fetch('http://localhost:9999/people/students/1')
+  useEffect(() => {
+    fetch("https://geolocation-db.com/json/d802faa0-10bd-11ec-b2fe-47a0872c6708")
     .then(res => res.json())
-    .then(data => console.log(data))*/
+    .then(data => {
+      user.country = data.country_name
+      user.city = data.city
+    })
 
-    /*fetch("https://geolocation-db.com/json/d802faa0-10bd-11ec-b2fe-47a0872c6708")
-    .then(res => res.json())
-    .then(data => console.log(data))
-
-  })*/
+  })
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,11 +42,24 @@ const Login = () => {
       method: 'POST'
     })
     .then(res => res.ok === true && res.json())
-    .then(data => data && data != null ? console.log(data) : setError("the username or password is incorrect"))
-    .catch(err => {
-      console.error(err)
+    .then(data => {
+      //console.log(data)
+      if (data) {
+        data.country = user.country
+        data.city = user.city
+        localStorage.setItem("session", JSON.stringify(data))
+        setTimeout(() => {
+          navigate("/Home")
+        }, 2500);
+      } else {
+        setError("the username or password is incorrect")
+        setloading(false)
+      }
     })
-    .finally(() => setloading(false))
+    .catch(err => {
+      //console.error(err)
+      setloading(false)
+    })
   }
   return (
       <>

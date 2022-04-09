@@ -62,18 +62,17 @@ export const Register = () => {
     if (messages.errors.length === 0) {
       
       if (!loading) {
-        console.log("no")
         e.target.querySelector('button').classList.add('disabled')
-        fetch(`http://localhost:9999/people/${user.profile === 'Student' ? 'students' : 'teachers'}/1`, {
-          method: 'GET',
+        fetch(`http://localhost:9999/people/${user.profile === 'Student' ? 'students' : 'teachers'}`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify(user)
         })
         .then(res => res.json())
         .then(data => {
           messages.success.push("The user was successfully registered")
-          localStorage.removeItem("sesion")
           localStorage.setItem("session", JSON.stringify(data))
           setTimeout(() => {
             navigate(`/Home`)

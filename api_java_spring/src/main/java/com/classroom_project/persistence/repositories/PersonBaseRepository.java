@@ -12,10 +12,10 @@ public interface PersonBaseRepository<T extends Person> extends JpaRepository<T,
     List<T> findByEmail(String email); 
 
     default T login (String email, String password) {
-        List<T> people = findByEmail(email);
+        List<T> people = findByEmail(email.toLowerCase());
         if (!people.isEmpty()) {
             for (T person : people) {
-                if (person.getEmail().equals(email) && person.getPassword().equals(password)) {
+                if (person.getEmail().toLowerCase().equals(email.toLowerCase()) && person.getPassword().equals(password)) {
                     return person;
                 }
             }
