@@ -1,10 +1,10 @@
 package com.classroom_project.domain.services;
 
 import java.util.List;
-
+import com.classroom_project.domain.dto.EnrolledSubjectDTO;
 import com.classroom_project.persistence.entities.EnrolledSubject;
+import com.classroom_project.persistence.mapper.EnrolledSubjectMapper;
 import com.classroom_project.persistence.repositories.EnrolledSubjectRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +12,32 @@ import org.springframework.stereotype.Service;
 public class EnrolledSubjectService {
     @Autowired
     private EnrolledSubjectRepository repository;
+    @Autowired
+    private EnrolledSubjectMapper mapper;
 
-    public List<EnrolledSubject> getAll() {
-        return repository.findAll();
+    public List<EnrolledSubjectDTO> getAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
-    public List<EnrolledSubject> getByStudentId(long id) {
-        return repository.findByStudentId(id);
+    public List<EnrolledSubjectDTO> getByStudentId(long id) {
+        return mapper.toDTOList(repository.findByStudentId(id));
     }
 
-    public List<EnrolledSubject> getByTeacherId(long id) {
-        return repository.findByTeacherId(id);
+    public List<EnrolledSubjectDTO> getByTeacherId(long id) {
+        return mapper.toDTOList(repository.findByTeacherId(id));
     }
+
+    public boolean save(EnrolledSubjectDTO dto) {
+        EnrolledSubject e = repository.save(mapper.toEntity(dto));
+        return e != null ? true : false;
+    }
+
+    public EnrolledSubjectDTO delete(Long id) {
+        return repository.findById(id).map(e -> {
+               repository.deleteById(id);
+               return mapper.toDTO(e);
+               })
+               .orElse(null);
+    }
+    
 }
