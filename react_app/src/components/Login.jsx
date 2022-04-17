@@ -1,15 +1,20 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { NavLink } from 'react-router-dom'
+import { Footer } from './Footer'
 
 const Login = () => {
+  const location = useLocation();
   const [user, setUser] = useState({email : "", password : ""})
   const [loading, setloading] = useState(false)
   const [error, setError] = useState("")
+  const {state} = location
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = `NoteSys`
+    state !== null && setError(state)
     fetch("https://geolocation-db.com/json/d802faa0-10bd-11ec-b2fe-47a0872c6708")
     .then(res => res.json())
     .then(data => {
@@ -17,7 +22,7 @@ const Login = () => {
       user.city = data.city
     })
 
-  })
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,12 +50,13 @@ const Login = () => {
     .then(data => {
       //console.log(data)
       if (data) {
+        data.profile = data.semester ? "Student" : "Teacher"
         data.country = user.country
         data.city = user.city
         localStorage.setItem("session", JSON.stringify(data))
         setTimeout(() => {
           navigate("/Home")
-        }, 2500);
+        }, 2000);
       } else {
         setError("the username or password is incorrect")
         setloading(false)
@@ -107,6 +113,7 @@ const Login = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </>
   )
 }

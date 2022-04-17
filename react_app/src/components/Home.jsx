@@ -1,19 +1,26 @@
 import React from 'react'
 import { useEffect } from 'react';
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Student from './dashboards/Student';
+import Teacher from './dashboards/Teacher'
+import Header from './Header';
 
 const Home = () => {
-
-  const sesion = localStorage.getItem("session")
+  const session = JSON.parse(localStorage.getItem("session"))
+  const navigate = useNavigate()
 
   useEffect(() => {
-    document.title = `Home | ${document.title}`
+    session === null && navigate("/", { state:  "You must log in first"})
+    document.title = `Home | NoteSys`
   }, [])
   
-
-  //console.log(JSON.parse(localStorage.removeItem("session")))
   return (
-    <div>Home</div>
+    <>
+    <Header/>
+      <div className="container mt-5">
+      {session !== null && session.profile === 'Student' ? (<Student user={session} />) : (<Teacher user={session} />)}
+      </div>
+      </>
   )
 }
 
