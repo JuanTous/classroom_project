@@ -18,12 +18,16 @@ public class SubjectService {
     @Autowired
     private SubjectMapper mapper;
 
-    public List<Subject> getAll() {
-        return repository.findAll();
+    public List<SubjectDTO> getAll() {
+        return mapper.toDTOList(repository.findAll());
     }
 
     public SubjectDTO getById(Long id) {
         Optional<Subject> subject = repository.findById(id);
         return subject.isPresent() ? mapper.toDTO(subject.get()) : null;
+    }
+
+    public List<SubjectDTO> getByProgram(Long id) {
+        return mapper.toDTOList(repository.findByProgramId(id));
     }
 }
