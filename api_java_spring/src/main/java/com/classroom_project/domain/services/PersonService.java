@@ -57,6 +57,10 @@ public class PersonService {
         return teacher.isPresent() ? mapperTeacher.toDTO(teacher.get()) : null;
     }
 
+    public List<TeacherDTO> getTeachersByProgram(long id) {
+        return mapperTeacher.toDTOList(repoTeacher.findByProgramId(id));
+    }
+
     public TeacherDTO saveTeacher(Teacher t) {
         Teacher teacher = repoTeacher.save(t);
         return mapperTeacher.toDTO(teacher);

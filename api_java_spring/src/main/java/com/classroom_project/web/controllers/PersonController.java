@@ -47,6 +47,11 @@ public class PersonController {
         return new ResponseEntity<>(service.getAllTeachers(), HttpStatus.OK);
     }
 
+    @GetMapping("/teachers/program/{id}")
+    public ResponseEntity<?> getAllTeachersByProgram(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(service.getTeachersByProgram(id), HttpStatus.OK);
+    }
+
     @GetMapping("/teachers/{id}")
     public ResponseEntity<?> getTeacher(@PathVariable("id") long id) {
         TeacherDTO dto = service.getTeacher(id);

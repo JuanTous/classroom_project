@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long>{
     List<Subject> findByProgramId(Long id);
+    List<Subject> findByCredits(int n);
 }

@@ -1,7 +1,10 @@
 package com.classroom_project.domain.services;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.classroom_project.domain.dto.SubjectDTO;
 import com.classroom_project.persistence.entities.Subject;
@@ -28,6 +31,12 @@ public class SubjectService {
     }
 
     public List<SubjectDTO> getByProgram(Long id) {
-        return mapper.toDTOList(repository.findByProgramId(id));
+        List<Subject> byProgram = repository.findByProgramId(id);
+        List<Subject> byCredits = repository.findByCredits(0);
+        Set<Subject> setList = new HashSet<>();
+        setList.addAll(byProgram);
+        setList.addAll(byCredits);
+        byProgram = new ArrayList<>(setList);
+        return mapper.toDTOList(byProgram);
     }
 }
