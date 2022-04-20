@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import Modal from '../Modal'
 
-const Student = ({user}) => {
+const Student = ({user, subjects}) => {
     const [enrolled, setEnrolled] = useState([])
     const [errors, setErrors] = useState("")
     const [loading, setloading] = useState(true)
+
+    const unsubscribe = (id) => {
+        let newList = enrolled.filter(e => e.id !== id)
+        setEnrolled(newList)
+    }
 
     const getAverage = (n1, n2, n3) => {
         let color
@@ -12,7 +18,7 @@ const Student = ({user}) => {
             color = "secondary"
             average = 0
         } else {
-            average = (n1 + n2 + n3) / 3
+            average = ((n1 + n2 + n3) / 3).toFixed(2)
             if ((n1 === null || n1 === 0) || (n2 === null || n2 === 0) || (n3 === null || n3 === 0)) {
                 color = "primary"
             } else {
@@ -43,7 +49,7 @@ const Student = ({user}) => {
     }, [])
 
     useEffect(()=>{
-    }, [loading, errors])
+    }, [enrolled, loading, errors])
 
   return (
     <>
@@ -53,36 +59,58 @@ const Student = ({user}) => {
             <div className="card mb-4">
                 <div className="card-header"><h3><i className="fas fa-tasks me-2"></i>Mis notas</h3></div>
                 <div className="card-body">
-                <div className='text-end'><span className='me-1'>FINAL</span></div>
+                <div className='text-end'>{enrolled.length !== 0 && <span className='me-3'>FINAL</span>}</div>
                 <div className="card mb-2">
+                <div className="accordion accordion-flush" id="accordionFlushExample">
                 {enrolled.length !== 0 ? 
-                (enrolled.map((e) => {
+                (enrolled.map((e, i) => {
                     const {color, average} = getAverage(e.firstScore, e.secondScore, e.thirdScore)
-                    return (
-                        <div className="list-group-item text-primary d-flex overflow-auto">
-                        <div className="mw-100 w-75">
-                        <span className='fs-4'>{e.subject.name}</span>
-                        </div>
-                        <span className="border-end w-25"></span>
-                        <div className="text-center align-self-center d-flex ms-3">
-                        <span className="badge bg-primary">{e.firstScore === null && 0}</span>
-                        <span className="badge bg-primary ms-3">{e.secondScore === null && 0}</span>
-                        <span className="badge bg-primary ms-3">{e.thirdScore === null && 0}</span>
-                        <span className={`badge ms-3 bg-${color}`}>{average}</span>
+                    return (  
+                    <div className="accordion-item">
+                        <h2 className="accordion-header" id="flush-headingOne">
+                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={"#flush-collapseOne"+i} aria-expanded="false" aria-controls={"flush-collapseOne"+i}>
+                            <div className="mw-100 w-75">
+                                <span className='fs-3'>{e.subject.name}</span>
+                            </div>
+                            <span className="border-end w-25"></span>
+                            <div className="text-center align-self-center d-flex fs-5 ms-3">
+                                <span className="badge bg-primary">{e.firstScore === null ? 0 : e.firstScore}</span>
+                                <span className="badge bg-primary ms-3">{e.secondScore === null ? 0 : e.secondScore}</span>
+                                <span className="badge bg-primary ms-3">{e.thirdScore === null ? 0 : e.thirdScore}</span>
+                                <span className={`badge ms-3 bg-${color}`}>{average}</span>
+                            </div>
+                        </button>
+                        </h2>
+                        <div id={"flush-collapseOne"+i} className="accordion-collapse collapse px-5 py-3" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div className="d-flex justify-content-between mw-100">
+                            <div className='justify-content-around'>
+                                <li><b>Credits: </b>{e.subject.credits}</li>
+                                <li><b>Teacher: </b>{e.teacher.names} {e.teacher.surnames} {`<${e.teacher.email}>`}</li>
+                                <li><b>Teacher program: </b>{e.teacher.program.name}</li>
+                            </div>
+                            <span className='align-self-center'><button className='btn btn-danger' onClick={() => unsubscribe(e.id)}>unsubscribe</button></span>
+                            </div>
                         </div>
                     </div>
                     )
                 })) 
-                : (<h5>There isn't any enrolled subject</h5>)}
+                : (<h5 className='text-center text-secondary mb-0 p-2 fs-2'>There isn't any enrolled subject</h5>)}
+                </div>
                 </div>
                 </div>
                 <div className='card-footer'>
 
                 </div>
             </div>
+            <div className='text-center'><button className='btn btn-outline-light fs-3' data-bs-toggle="modal" data-bs-target="#enrollSubjectModal"><i className="far fa-plus-square me-2"></i>Enroll subject</button></div>
         </div>) : 
         (<h1 className="text-light text-center" style={{marginTop: "15rem"}}>{errors}</h1>)
         }
+
+        <Modal subjects={subjects} data={{
+                                                            id : "enrollSubjectModal",
+                                                            title : "Enroll subject"
+                                                        }} />
     </>
   )
 }

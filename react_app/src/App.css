@@ -179,6 +179,14 @@ body{
   margin-top: 20px;
   animation: spin 1s ease infinite;
 }
+
+.accordion-button {
+  align-items: initial;
+}
+
+.accordion-button::after {
+  width: 0rem;
+}
   
   @keyframes spin {
     0% {
