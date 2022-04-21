@@ -1,28 +1,69 @@
 import React, { useState, useEffect } from 'react'
 
 const Modal = (props) => {
-  var {data} = props 
-  var {subjects} = props
+  var {values} = props
+  var [message, setMessage] = useState("")
+  const {data, subjects, enrolled} = props
   const [teachers, setTeachers] = useState([])
-  const [message, setMessage] = useState("")
-  const [selectedValues, setSelectedValues] = useState({subject : null, teacher : null})
 
   useEffect(() => {
-  }, [subjects, teachers])
+  }, [subjects, teachers, message, values])
   
 
   const handleChange = (e) => {
-    let {name, value} = e.target
-    setSelectedValues({ ...selectedValues, [name]: value});
+    const {name, value} = e.target
     if (name === "subject") {
-      setSelectedValues({subject : null, teacher : null})
-      data[name] = subjects.find(s => s.id === parseInt(value))
-      fetch(`http://localhost:9999/people/teachers/program/${data[name].program.id}`)
+      document.getElementsByName("teacher")[0].options.selectedIndex = 0
+      values.teacher.id = null;
+      fetch(`http://localhost:9999/people/teachers/program/${subjects.find(a => a.id === parseInt(value)).program.id}`)
       .then(res => res.json())
-      .then(data => setTeachers(data.length !== 0 ? data : false))
+      .then(data => setTeachers(data))
       .catch(err => setMessage(err))
     }
-    console.log(selectedValues)
+    values[name].id = parseInt(value);
+  }
+
+  const handleSubmit = (e) => {
+    message = ""
+    if(values.subject.id === null | values.teacher.id === null){
+      setMessage("There are unselected fields")
+      return null;
+    } else {
+      if(message === ""){
+        const find = enrolled.find(e => e.student.id === values.student.id && e.subject.id === values.subject.id && e.teacher.id === values.teacher.id)
+        if (find) {
+          setMessage("Is already enrolled")
+        } else {
+          fetch(`http://localhost:9999/enrolled`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+          })
+          .then(res => res.ok === true && res.json())
+          .then(data => {
+            if (data) {
+              values.subject.id = null
+              values.teacher.id = null
+              document.getElementsByName("subject")[0].options.selectedIndex = 0
+              document.getElementsByName("teacher")[0].options.selectedIndex = 0
+              // eslint-disable-next-line no-undef
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Your subject has been enrolled',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            } else {
+              setMessage("An error has occurred when registering the subject")
+            }
+          })
+          .catch(err => setMessage(err))
+        }
+      }
+    }
   }
 
   return (
@@ -45,13 +86,9 @@ const Modal = (props) => {
               </div>
               <div className="form-outline text-start mb-4">
                 <label className="form-label">Teachers availables</label>
-                <select name="teacher" className="form-select form-select-lg" onChange={(e) => {
-                  let {name, value} = e.target;
-                  data[name] = teachers.find(t => t.id === parseInt(value))
-                  console.log(data)
-                }}>
-                  <option value={""} selected disabled>{teachers.length === 0 ? "Select teacher to enroll" : !teachers ? "There are no teachers available for this subject" : "Select teacher to enroll"}</option>
-                  {teachers instanceof Array & teachers.length !== 0 && teachers.map(({id, names, surnames}) => {
+                <select name="teacher" className="form-select form-select-lg" onChange={handleChange}>
+                  <option value={""} selected disabled>Select teacher to enroll</option>
+                  {teachers.length !== 0 && teachers.map(({id, names, surnames}) => {
                     return <option value={id}>{names} {surnames}</option>
                   })}
                 </select>                 
@@ -59,8 +96,8 @@ const Modal = (props) => {
               {message !== "" && <li className='text-danger fs-3'>{message}</li>}
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary">Save changes</button>
-              <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
+              <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Save changes</button>
+              <button type="button" className="btn btn-danger" onClick={() => setMessage("")} data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>

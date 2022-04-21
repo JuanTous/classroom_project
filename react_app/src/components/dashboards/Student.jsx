@@ -39,7 +39,6 @@ const Student = ({user, subjects}) => {
         .then(data => {
             if (data) {
                 setEnrolled(data)
-                console.log(data)
             } else {
                 setErrors("The request to the server has not been found")
             }
@@ -107,10 +106,17 @@ const Student = ({user, subjects}) => {
         (<h1 className="text-light text-center" style={{marginTop: "15rem"}}>{errors}</h1>)
         }
 
-        <Modal subjects={subjects} data={{
-                                                            id : "enrollSubjectModal",
-                                                            title : "Enroll subject"
-                                                        }} />
+        <Modal subjects={subjects} enrolled={enrolled} data={{
+            id : "enrollSubjectModal",
+            title : "Enroll subject"
+        }} values={{
+            student: {id : user.id},
+            subject : {id : null}, 
+            teacher : {id : null},
+            firstScore : null,
+            secondScore : null,
+            thirdScore : null
+          }} />
     </>
   )
 }

@@ -55,7 +55,7 @@ const Login = () => {
         data.city = user.city
         localStorage.setItem("session", JSON.stringify(data))
         setTimeout(() => {
-          navigate("/Home")
+          navigate("/home")
         }, 2000);
       } else {
         setError("the username or password is incorrect")
