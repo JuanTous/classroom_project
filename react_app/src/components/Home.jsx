@@ -27,7 +27,7 @@ const Home = () => {
   
   return (
     <>
-    <Header/>
+    <Header user={session}/>
       <div className="container mt-5">
       {session !== null && session.profile === 'Student' ? (<Student user={session} subjects={subjects}/>) : (<Teacher user={session} subjects={subjects}/>)}
       </div>

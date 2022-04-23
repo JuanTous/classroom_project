@@ -15,13 +15,6 @@ const Login = () => {
   useEffect(() => {
     document.title = `NoteSys`
     state !== null && setError(state)
-    fetch("https://geolocation-db.com/json/d802faa0-10bd-11ec-b2fe-47a0872c6708")
-    .then(res => res.json())
-    .then(data => {
-      user.country = data.country_name
-      user.city = data.city
-    })
-
   }, [])
 
   const handleChange = (e) => {
@@ -51,8 +44,6 @@ const Login = () => {
       //console.log(data)
       if (data) {
         data.profile = data.semester ? "Student" : "Teacher"
-        data.country = user.country
-        data.city = user.city
         localStorage.setItem("session", JSON.stringify(data))
         setTimeout(() => {
           navigate("/home")

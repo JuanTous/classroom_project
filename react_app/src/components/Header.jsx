@@ -1,8 +1,21 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { useNavigate } from "react-router-dom";
+import Modal from './Modal'
 
-const Header = () => {
+const Header = ({user}) => {
   const navigate = useNavigate()
+  const [address, setAddress] = useState(null)
+  
+
+  useEffect(() => {
+    fetch("https://geolocation-db.com/json/d802faa0-10bd-11ec-b2fe-47a0872c6708")
+    .then(res => res.json())
+    .then(data => {
+      setAddress({country : data.country_name, city : data.city})
+    })
+
+  }, [address])
+  
 
   const logOut = () => {
     /* global Swal */
@@ -37,14 +50,19 @@ const Header = () => {
                 Me
             </a>
             <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                <li><a className="dropdown-item" style={{cursor : "pointer"}}>Info</a></li>
+                <li><a className="dropdown-item" style={{cursor : "pointer"}} data-bs-toggle="modal" data-bs-target="#infoModal">Info</a></li>
                 <li><a className="dropdown-item" style={{cursor : "pointer"}} onClick={logOut}>Log out</a></li>
             </ul>
             </li>
-        </ul>
+        </ul><div className='text-secondary fs-5 ms-3'>Connected from {address ? `${address.city}-${address.country}` : '...'}</div>
         </div>
     </div>
     </nav>
+    <Modal subjects={null} enrolled={null} data={{
+      id : "infoModal",
+      title : "My info",
+      type : "info"
+    }} values={user} />
     </>
   )
 }
