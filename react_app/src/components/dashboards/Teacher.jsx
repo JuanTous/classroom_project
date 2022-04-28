@@ -6,50 +6,6 @@ const Teacher = ({user, subjects}) => {
   const [errors, setErrors] = useState("")
   const [loading, setloading] = useState(true)
 
-  const unsubscribe = (id) => {
-        /* global Swal */
-    Swal.fire({
-        title: 'Do you want to drop this subject?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`http://localhost:9999/enrolled/${id}`, {
-                method: 'DELETE'
-            })
-            .then(res => res.ok === true && res.json())
-            .then(data => {
-                if (data) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'The subject has been dropped',
-                        showConfirmButton: false,
-                        timer: 2500
-                    })
-                    let newList = enrolled.filter(e => e.id !== id)
-                    setEnrolled(newList)
-                } else {
-                    setErrors("The course could not be dropped")
-                }
-            })
-            .catch(err => {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: err,
-                    showConfirmButton: false,
-                    timer: 5000
-                })
-            })
-        }
-    });
-    }
-
   const groupSubjects = (data) => {
     let ids = []
     let grouped = []
