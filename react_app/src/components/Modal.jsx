@@ -109,7 +109,7 @@ const Modal = (props) => {
               {message !== "" && <li className='text-danger fs-3'>{message}</li>}
             </div>
             <div className="modal-footer">
-              {data.type !== 'info' && <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Save changes</button>}
+              {data.type !== 'info' && <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{data.type === 'enroll' ? 'Enroll me' : 'Save'}</button>}
               <button type="button" className="btn btn-danger" onClick={() => setMessage("")} data-bs-dismiss="modal">Close</button>
             </div>
           </div>

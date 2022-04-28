@@ -8,46 +8,46 @@ const Student = ({user, subjects}) => {
 
     const unsubscribe = (id) => {
             /* global Swal */
-    Swal.fire({
-        title: 'Do you want to drop this subject?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel'
-      }).then((result) => {
-          if (result.isConfirmed) {
-            fetch(`http://localhost:9999/enrolled/${id}`, {
-                method: 'DELETE'
-              })
-            .then(res => res.ok === true && res.json())
-            .then(data => {
-                if (data) {
+        Swal.fire({
+            title: 'Do you want to drop this subject?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:9999/enrolled/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(res => res.ok === true && res.json())
+                .then(data => {
+                    if (data) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'The subject has been dropped',
+                            showConfirmButton: false,
+                            timer: 2500
+                        })
+                        let newList = enrolled.filter(e => e.id !== id)
+                        setEnrolled(newList)
+                    } else {
+                        setErrors("The course could not be dropped")
+                    }
+                })
+                .catch(err => {
                     Swal.fire({
                         position: 'top-end',
-                        icon: 'success',
-                        title: 'The subject has been dropped',
+                        icon: 'error',
+                        title: err,
                         showConfirmButton: false,
-                        timer: 2500
-                      })
-                    let newList = enrolled.filter(e => e.id !== id)
-                    setEnrolled(newList)
-                } else {
-                    setErrors("The course could not be dropped")
-                }
-            })
-            .catch(err => {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: err,
-                    showConfirmButton: false,
-                    timer: 5000
-                  })
-            })
-          }
-      });
+                        timer: 5000
+                    })
+                })
+            }
+        });
     }
 
     const getAverage = (n1, n2, n3) => {
@@ -95,7 +95,7 @@ const Student = ({user, subjects}) => {
         errors === '' ? 
         (<div className="col-xl-auto">
             <div className="card mb-4">
-                <div className="card-header"><h3><i className="fas fa-tasks me-2"></i>Mis notas</h3></div>
+                <div className="card-header"><h3><i className="fas fa-tasks me-2"></i>My subjects</h3></div>
                 <div className="card-body">
                 <div className='text-end'>{enrolled.length !== 0 && <span className='me-3'>FINAL</span>}</div>
                 <div className="card mb-2">
@@ -137,10 +137,9 @@ const Student = ({user, subjects}) => {
                 </div>
                 </div>
                 <div className='card-footer'>
-
+                    <div className='text-center'><button className='btn btn-outline-primary fs-3' data-bs-toggle="modal" data-bs-target="#enrollSubjectModal"><i className="far fa-plus-square me-2"></i>Enroll subject</button></div>
                 </div>
             </div>
-            <div className='text-center'><button className='btn btn-outline-light fs-3' data-bs-toggle="modal" data-bs-target="#enrollSubjectModal"><i className="far fa-plus-square me-2"></i>Enroll subject</button></div>
         </div>) : 
         (<h1 className="text-light text-center" style={{marginTop: "15rem"}}>{errors}</h1>)
         }
