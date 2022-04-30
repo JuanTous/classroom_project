@@ -8,10 +8,10 @@ const Header = ({user}) => {
   
 
   useEffect(() => {
-    fetch("https://geolocation-db.com/json/d802faa0-10bd-11ec-b2fe-47a0872c6708")
+    fetch("http://ip-api.com/json/")
     .then(res => res.json())
     .then(data => {
-      setAddress({country : data.country_name, city : data.city})
+      setAddress({country : data.country, city : data.city})
     })
 
   }, [address])

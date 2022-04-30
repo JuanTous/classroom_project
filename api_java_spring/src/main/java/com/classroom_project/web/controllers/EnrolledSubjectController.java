@@ -33,15 +33,13 @@ public class EnrolledSubjectController {
     @GetMapping("/student/{id}")
     public ResponseEntity<List<EnrolledSubjectDTO>> getEnrolledByStudent(@PathVariable("id") long id) {
         List<EnrolledSubjectDTO> subjects = service.getByStudentId(id);
-        return !subjects.isEmpty() ? new ResponseEntity<>(subjects, HttpStatus.OK) 
-        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(subjects, HttpStatus.OK);
     }
 
     @GetMapping("/teacher/{id}")
     public ResponseEntity<List<EnrolledSubjectDTO>> getEnrolledByTeacher(@PathVariable("id") long id) {
         List<EnrolledSubjectDTO> subjects = service.getByTeacherId(id);
-        return !subjects.isEmpty() ? new ResponseEntity<>(subjects, HttpStatus.OK) 
-        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(subjects, HttpStatus.OK);
     }
 
     @PostMapping
