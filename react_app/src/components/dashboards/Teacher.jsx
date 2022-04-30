@@ -5,6 +5,7 @@ const Teacher = ({user, subjects}) => {
   const [enrolled, setEnrolled] = useState([])
   const [errors, setErrors] = useState("")
   const [loading, setloading] = useState(true)
+  const [assign, setAssign] = useState(null)
 
   const groupSubjects = (data) => {
     let ids = []
@@ -56,6 +57,7 @@ const Teacher = ({user, subjects}) => {
       .then(res => res.ok === true && res.json())
       .then(data => {
           if (data) {
+            console.log(data)
               groupSubjects(data)
           } else {
               setErrors("The request to the server has not been found")
@@ -111,7 +113,7 @@ const Teacher = ({user, subjects}) => {
                               {e.enrolled.map(en => {
                                 const {color, average} = getAverage(en.firstScore, en.secondScore, en.thirdScore)
                                 return <tr>
-                                         <td><button className='btn btn-outline-info'><i className="fas fa-edit me-1"></i>Edit</button></td>
+                                         <td><button className='btn btn-outline-info' data-bs-toggle="modal" data-bs-target="#assignNoteModal" onClick={()=>setAssign(en)}><i className="fas fa-edit me-1"></i>Edit</button></td>
                                          <td>{`${en.student.names} ${en.student.surnames}`}</td>
                                          <td>{en.student.email}</td>
                                          <td>{en.firstScore === null ? 'Unrated' : en.firstScore}</td>
@@ -126,7 +128,7 @@ const Teacher = ({user, subjects}) => {
                     </div>
                     )
                 })) 
-                : (<h5 className='text-center text-secondary mb-0 p-2 fs-2'>There isn't any enrolled subject</h5>)}
+                : (<h5 className='text-center text-secondary mb-0 p-2 fs-2'>There is no student enrolled in any of your subjects</h5>)}
                 </div>
                 </div>
                 </div>
@@ -135,6 +137,11 @@ const Teacher = ({user, subjects}) => {
         </div>) : 
         (<h1 className="text-light text-center" style={{marginTop: "15rem"}}>{errors}</h1>)
       }
+      <Modal subjects={null} enrolled={null} data={{
+            id : "assignNoteModal",
+            title : "Assign note",
+            type : "assign"
+        }} values={assign} />
     </>
   )
 }

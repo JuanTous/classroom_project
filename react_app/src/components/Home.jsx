@@ -19,7 +19,7 @@ const Home = () => {
       .then(data => setSubjects(data))
       .catch(err => {
         alert(err)
-        window.location.reload()
+        navigate("/home")
       })
     }
     document.title = `Home | NoteSys`

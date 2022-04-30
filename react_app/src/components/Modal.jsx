@@ -6,11 +6,14 @@ const Modal = (props) => {
   var [message, setMessage] = useState("")
   const {data, subjects, enrolled} = props
   const [teachers, setTeachers] = useState([])
-  const navigate = useNavigate();
 
   useEffect(() => {
   }, [subjects, teachers, message, values])
-  
+
+  const handleNoteChange = (e) => {
+    const {name, value} = e.target;
+    values[name] = value;
+  }
 
   const handleChange = (e) => {
     const {name, value} = e.target
@@ -85,6 +88,22 @@ const Modal = (props) => {
                 return i !== 0 && <div className='text-uppercase fs-5'><span className='fw-bolder'>{k}:</span> {values[k] instanceof Object ? `${values[k].name}` : `${values[k]}`}</div>
               })
               :
+              data.type === 'assign' ? 
+              <>
+                    <div className="form-outline text-start mb-4">
+                      <label className="form-label">First score</label>
+                      <input type="number" name="firstScore" className="form-control form-control-lg" onChange={handleNoteChange} min={"1"} max={"5"} autoComplete="off" />
+                    </div>
+                    <div className="form-outline text-start mb-4">
+                      <label className="form-label">Second score</label>
+                      <input type="number" name="secondScore" className="form-control form-control-lg" onChange={handleNoteChange} min={"1"} max={"5"} autoComplete="off" />
+                    </div>
+                    <div className="form-outline text-start mb-4">
+                      <label className="form-label">Third score</label>
+                      <input type="number" name="thirdScore" className="form-control form-control-lg" onChange={handleNoteChange} min={"1"} max={"5"} autoComplete="off" />
+                    </div>
+              </>
+              :
               (<>
                 <div className="form-outline text-start mb-4">
                   <label className="form-label">Subjects availables</label>
@@ -109,7 +128,33 @@ const Modal = (props) => {
               {message !== "" && <li className='text-danger fs-3'>{message}</li>}
             </div>
             <div className="modal-footer">
-              {data.type !== 'info' && <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{data.type === 'enroll' ? 'Enroll me' : 'Save'}</button>}
+              {data.type !== 'info' && <button type="submit" className="btn btn-primary" onClick={data.type !== 'assign' ? handleSubmit : ()=>{
+                          fetch(`http://localhost:9999/enrolled/${values.id}`, {
+                            method: 'PUT',
+                            headers: {
+                              'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(values)
+                          })
+                          .then(res => res.ok === true && res.json())
+                          .then(data => {
+                            if (data) {
+                              // eslint-disable-next-line no-undef
+                              Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Your subject has been updated',
+                                showConfirmButton: false,
+                                timer: 1500
+                              })
+                              setInterval(() => {
+                                window.location.reload()
+                              }, 2000);
+                            } else {
+                              setMessage("An error has occurred when updating the enrolled")
+                            }
+                          })
+              }}>{data.type === 'enroll' ? 'Enroll me' : 'Save'}</button>}
               <button type="button" className="btn btn-danger" onClick={() => setMessage("")} data-bs-dismiss="modal">Close</button>
             </div>
           </div>
