@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import com.classroom_project.domain.dto.StudentDTO;
 import com.classroom_project.domain.dto.TeacherDTO;
+import com.classroom_project.persistence.entities.Admin;
 import com.classroom_project.persistence.entities.Student;
 import com.classroom_project.persistence.entities.Teacher;
+import com.classroom_project.persistence.mapper.AdminMapper;
 import com.classroom_project.persistence.mapper.StudentMapper;
 import com.classroom_project.persistence.mapper.TeacherMapper;
+import com.classroom_project.persistence.repositories.AdminRepository;
 import com.classroom_project.persistence.repositories.StudentRepository;
 import com.classroom_project.persistence.repositories.TeacherRepository;
 
@@ -21,9 +24,13 @@ public class PersonService {
     @Autowired
     private TeacherMapper mapperTeacher;
     @Autowired
+    private AdminMapper mapperAdmin;
+    @Autowired
     private StudentRepository repoStudent;
     @Autowired
     private TeacherRepository repoTeacher;
+    @Autowired
+    private AdminRepository repoAdmin;
 
     //-----Students-----
     public List<StudentDTO> getAllStudents() {
@@ -78,9 +85,14 @@ public class PersonService {
         Student s = repoStudent.login(email, password);
         if (s == null) {
             Teacher t = repoTeacher.login(email, password);
-            return t != null ? mapperTeacher.toDTO(t) : null;
+            if (t == null) {
+                Admin a = repoAdmin.login(email, password);
+                return a != null ? mapperAdmin.toDTO(a) : null;
+            } else {
+                return mapperTeacher.toDTO(t);
+            }
         } else {
-            return s != null ? mapperStudent.toDTO(s) : null;
+            return mapperStudent.toDTO(s);
         }
         
     }
