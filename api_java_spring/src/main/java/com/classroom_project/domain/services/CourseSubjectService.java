@@ -29,6 +29,10 @@ public class CourseSubjectService {
         return mapper.toDTOList(repository.findBySubjectProgramId(id));
     }
 
+    public List<CourseSubjectDTO> getByTeacherId(long id) {
+        return mapper.toDTOList(repository.findByTeacherId(id));
+    }
+
     public CourseSubjectDTO delete(Long id) {
         return repository.findById(id).map(c -> {
                repository.deleteById(id);
