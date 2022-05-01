@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EnrolledSubjectRepository extends JpaRepository<EnrolledSubject, Long> {
     List<EnrolledSubject> findByStudentId(long id);
-    List<EnrolledSubject> findByTeacherId(long id);
+    List<EnrolledSubject> findByCourseSubjectTeacherId(long id);
 }

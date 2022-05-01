@@ -39,4 +39,16 @@ public class SubjectService {
         byProgram = new ArrayList<>(setList);
         return mapper.toDTOList(byProgram);
     }
+
+    public SubjectDTO save(Subject s) {
+        Subject subject = repository.save(s);
+        return mapper.toDTO(subject);
+    }
+    
+    public Subject deleteSubject(Long id) {
+        return repository.findById(id).map(s -> {
+            repository.deleteById(id);
+            return s;
+        }).orElse(null);
+    }
 }

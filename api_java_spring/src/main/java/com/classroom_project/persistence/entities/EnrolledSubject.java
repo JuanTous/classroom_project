@@ -1,5 +1,7 @@
 package com.classroom_project.persistence.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "enrolled_subjects")
-public class EnrolledSubject {
+public class EnrolledSubject implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,11 +20,8 @@ public class EnrolledSubject {
     @JoinColumn(name = "id_student")
     private Student student;
     @ManyToOne
-    @JoinColumn(name = "id_subject")
-    private Subject subject;
-    @ManyToOne
-    @JoinColumn(name = "id_teacher")
-    private Teacher teacher;
+    @JoinColumn(name = "id_course_subject")
+    private CourseSubject courseSubject;
     private Float firstScore;
     private Float secondScore;
     private Float thirdScore;
@@ -46,20 +45,12 @@ public class EnrolledSubject {
         this.student = student;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public CourseSubject getCourseSubject() {
+        return courseSubject;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setCourseSubject(CourseSubject courseSubject) {
+        this.courseSubject = courseSubject;
     }
 
     public Float getFirstScore() {
@@ -85,6 +76,4 @@ public class EnrolledSubject {
     public void setThirdScore(Float thirdScore) {
         this.thirdScore = thirdScore;
     }
-
-
 }
