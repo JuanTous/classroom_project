@@ -28,6 +28,11 @@ public class CourseSubjectController {
     public ResponseEntity<List<CourseSubjectDTO>> getAll() {
         return new ResponseEntity<List<CourseSubjectDTO>>(service.getAll(), HttpStatus.OK);
     }
+
+    @GetMapping("/program/{id}")
+    public ResponseEntity<List<CourseSubjectDTO>> getByProgram(@PathVariable("id") Long id) {
+        return new ResponseEntity<List<CourseSubjectDTO>>(service.getBySubjectProgramId(id), HttpStatus.OK);
+    }
     
     @PostMapping
     public ResponseEntity<Boolean> save(@RequestBody CourseSubject e) {
