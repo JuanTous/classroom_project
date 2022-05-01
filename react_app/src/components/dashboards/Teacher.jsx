@@ -11,18 +11,18 @@ const Teacher = ({user, subjects}) => {
     let ids = []
     let grouped = []
     data.forEach(e => {
-      ids.push(e.subject.id)
+      ids.push(e.courseSubject.subject.id)
     })
 
     ids = new Set(ids)
 
     ids.forEach(id => {
-      let enr = data.find(d => d.subject.id === id)
-      grouped.push({id: id, name: enr.subject.name, enrolled: []})
+      let enr = data.find(d => d.courseSubject.subject.id === id)
+      grouped.push({id: id, name: enr.courseSubject.subject.name, enrolled: []})
     })
     grouped.forEach(g => {
       data.forEach(d => {
-        if (g.id === d.subject.id) {
+        if (g.id === d.courseSubject.subject.id) {
           g.enrolled.push(d)
         }
       })
@@ -57,8 +57,7 @@ const Teacher = ({user, subjects}) => {
       .then(res => res.ok === true && res.json())
       .then(data => {
           if (data) {
-            console.log(data)
-              groupSubjects(data)
+            groupSubjects(data)
           } else {
               setErrors("The request to the server has not been found")
           }

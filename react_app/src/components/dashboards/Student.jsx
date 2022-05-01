@@ -5,8 +5,6 @@ const Student = ({user, subjects}) => {
     const [enrolled, setEnrolled] = useState([])
     const [errors, setErrors] = useState("")
     const [loading, setloading] = useState(true)
-    console.log(subjects)
-    console.log(enrolled)
 
     const unsubscribe = (id) => {
             /* global Swal */
