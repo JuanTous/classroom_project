@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +38,14 @@ public class PersonController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<?> save(@RequestBody Student s) {
+    public ResponseEntity<?> saveStudent(@RequestBody Student s) {
         return new ResponseEntity<>(service.saveStudent(s), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable("id") Long id) {
+        Student s = service.deleteStudent(id);
+        return s != null ? new ResponseEntity<Student>(s, HttpStatus.OK) : new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
     }
 
     //-----Teachers-----
@@ -53,14 +60,20 @@ public class PersonController {
     }
 
     @GetMapping("/teachers/{id}")
-    public ResponseEntity<?> getTeacher(@PathVariable("id") long id) {
+    public ResponseEntity<?> getTeacher(@PathVariable("id") Long id) {
         TeacherDTO dto = service.getTeacher(id);
         return dto != null ? new ResponseEntity<>(dto, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/teachers")
-    public ResponseEntity<?> save(@RequestBody Teacher t) {
+    public ResponseEntity<?> saveTeacher(@RequestBody Teacher t) {
         return new ResponseEntity<>(service.saveTeacher(t), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/teachers/{id}")
+    public ResponseEntity<?> deleteTeacher(@PathVariable("id") Long id) {
+        Teacher t = service.deleteTeacher(id);
+        return t != null ? new ResponseEntity<Teacher>(t, HttpStatus.OK) : new ResponseEntity<Teacher>(HttpStatus.NOT_FOUND);
     }
 
     //-----AUTH-----
