@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Modal from '../Modal'
+import Modal from '../modals/Modal'
 
 const Student = ({user, subjects}) => {
     const [enrolled, setEnrolled] = useState([])

@@ -15,8 +15,11 @@ const Home = () => {
     if (session === null) {
       navigate("/", { state:  "You must log in first"})
     } else {
-      let url = session.profile === 'Teacher' ? `http://localhost:9999/course-subjects/teacher/${session.id}` : `http://localhost:9999/course-subjects/program/${session.program.id}`
-      session.program && fetch(url)
+      let url = ''
+      if (session.profile !== 'Admin') {
+        url = session.profile === 'Teacher' ? `http://localhost:9999/course-subjects/teacher/${session.id}` : `http://localhost:9999/course-subjects/program/${session.program.id}`
+      }
+      session.program && fetch('url')
       .then(res => res.json())
       .then(data => setSubjects(data))
       .catch(err => {

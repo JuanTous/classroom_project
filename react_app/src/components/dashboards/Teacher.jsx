@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Modal from '../Modal'
+import Modal from '../modals/Modal'
 
 const Teacher = ({user, subjects}) => {
   const [enrolled, setEnrolled] = useState([])
@@ -81,7 +81,6 @@ const Teacher = ({user, subjects}) => {
                 <div className="accordion accordion-flush" id="accordionFlushExample">
                 {enrolled.length !== 0 ? 
                 (enrolled.map((e, i) => {
-                    //const {color, average} = getAverage(e.firstScore, e.secondScore, e.thirdScore)
                     return (  
                     <div className="accordion-item">
                         <h2 className="accordion-header" id="flush-headingOne">
