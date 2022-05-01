@@ -2,6 +2,8 @@ package com.classroom_project.domain.services;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.classroom_project.domain.dto.AdminDTO;
 import com.classroom_project.domain.dto.StudentDTO;
 import com.classroom_project.domain.dto.TeacherDTO;
 import com.classroom_project.persistence.entities.Admin;
@@ -79,6 +81,28 @@ public class PersonService {
             return t;
         }).orElse(null);
     }
+
+        //-----Admin-----
+        public List<AdminDTO> getAllAdmin() {
+            return mapperAdmin.toDTOList(repoAdmin.findAll());
+        }
+    
+        public AdminDTO getAdmin(long id) {
+            Optional<Admin> admin = repoAdmin.findById(id);
+            return admin.isPresent() ? mapperAdmin.toDTO(admin.get()) : null;
+        }
+    
+        public AdminDTO saveAdmin(Admin a) {
+            Admin admin = repoAdmin.save(a);
+            return mapperAdmin.toDTO(admin);
+        }
+    
+        public Admin deleteAdmin(Long id) {
+            return repoAdmin.findById(id).map(a -> {
+                repoAdmin.deleteById(id);
+                return a;
+            }).orElse(null);
+        }
 
     //-----AUTH-----
     public Object login(String email, String password) {
