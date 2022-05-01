@@ -4,8 +4,7 @@ import { Footer } from './Footer'
 
 export const Register = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState('Student')
-  const [user, setUser] = useState({names : "", surnames : "", email : "", password : "", profile : profile, program : {id : ""}, semester : ""})
+  const [user, setUser] = useState({names : "", surnames : "", email : "", password : "", profile : 'Student', program : {id : ""}, semester : ""})
   const [programs, setPrograms] = useState([])
   const [messages, setMessages] = useState({errors : [], success : []})
   const [loading, setLoading] = useState(false)
@@ -25,14 +24,6 @@ export const Register = () => {
 
     if(type === 'select-one') {
       user[name]["id"] = value
-    }else if(type === 'radio') {
-      setProfile(value)
-      if (value === 'Student') {
-        user.semester = ""
-      } else {
-        delete user.semester
-      }
-      setUser({ ...user, [name]: value});
     } else {
       setUser({ ...user, [name]: value});
     }
@@ -65,7 +56,7 @@ export const Register = () => {
       
       if (!loading) {
         e.target.querySelector('button').classList.add('disabled')
-        fetch(`http://localhost:9999/people/${user.profile === 'Student' ? 'students' : 'teachers'}`, {
+        fetch(`http://localhost:9999/people/students`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -106,17 +97,6 @@ export const Register = () => {
                 <form onSubmit={handleSubmit}>
                 <h3 className="mb-5">Sign up</h3>
 
-                  <div className="d-flex justify-content-around mb-3">
-                    <div className="form-check form-check-inline">
-                      <input className="form-check-input" type="radio" checked={profile === 'Student' && true} name="profile" value="Student" onChange={handleChange}/>
-                      <label className="form-check-label">I'm a student</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                      <input className="form-check-input" type="radio" name="profile" value="Teacher" onChange={handleChange}/>
-                      <label className="form-check-label">I'm a teacher</label>
-                    </div>
-                  </div>
-
                   <div className="form-outline text-start mb-4">
                     <label className="form-label">Names</label>
                     <input type="text" name="names" className="form-control form-control-lg" onChange={handleChange} autoComplete="off" />
@@ -142,12 +122,10 @@ export const Register = () => {
                     </select>                 
                   </div>
 
-                  {profile === 'Student' && (
-                    <div className="form-outline text-start mb-4">
-                      <label className="form-label">Semester</label>
-                      <input type="number" name="semester" className="form-control form-control-lg" onChange={handleChange} autoComplete="off" />
-                    </div>
-                  )}
+                  <div className="form-outline text-start mb-4">
+                    <label className="form-label">Semester</label>
+                    <input type="number" name="semester" className="form-control form-control-lg" onChange={handleChange} autoComplete="off" />
+                  </div>
 
                   <div className="form-outline text-start mb-4">
                     <label className="form-label">Password</label>

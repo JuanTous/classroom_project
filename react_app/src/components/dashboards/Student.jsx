@@ -5,6 +5,8 @@ const Student = ({user, subjects}) => {
     const [enrolled, setEnrolled] = useState([])
     const [errors, setErrors] = useState("")
     const [loading, setloading] = useState(true)
+    console.log(subjects)
+    console.log(enrolled)
 
     const unsubscribe = (id) => {
             /* global Swal */
@@ -108,7 +110,7 @@ const Student = ({user, subjects}) => {
                         <h2 className="accordion-header" id="flush-headingOne">
                         <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={"#flush-collapseOne"+i} aria-expanded="false" aria-controls={"flush-collapseOne"+i}>
                             <div className="mw-100 w-75">
-                                <span className='fs-3'>{e.subject.name}</span>
+                                <span className='fs-3'>{e.courseSubject.subject.name}</span>
                             </div>
                             <span className="border-end w-25"></span>
                             <div className="text-center align-self-center d-flex fs-5 ms-3">
@@ -122,9 +124,9 @@ const Student = ({user, subjects}) => {
                         <div id={"flush-collapseOne"+i} className="accordion-collapse collapse px-5 py-3" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                         <div className="d-flex justify-content-between mw-100">
                             <div className='justify-content-around'>
-                                <li><b>Credits: </b>{e.subject.credits}</li>
-                                <li><b>Teacher: </b>{e.teacher.names} {e.teacher.surnames} {`<${e.teacher.email}>`}</li>
-                                <li><b>Teacher program: </b>{e.teacher.program.name}</li>
+                                <li><b>Credits: </b>{e.courseSubject.subject.credits}</li>
+                                <li><b>Teacher: </b>{e.courseSubject.teacher.names} {e.courseSubject.teacher.surnames} {`<${e.courseSubject.teacher.email}>`}</li>
+                                <li><b>Teacher program: </b>{e.courseSubject.teacher.program.name}</li>
                             </div>
                             <span className='align-self-center'><button className='btn btn-danger' onClick={() => unsubscribe(e.id)}>unsubscribe</button></span>
                             </div>
@@ -150,8 +152,7 @@ const Student = ({user, subjects}) => {
             type : "enroll"
         }} values={{
             student: {id : user.id},
-            subject : {id : null}, 
-            teacher : {id : null},
+            courseSubject : {id : null}, 
             firstScore : null,
             secondScore : null,
             thirdScore : null

@@ -5,10 +5,10 @@ const Modal = (props) => {
   var {values} = props
   var [message, setMessage] = useState("")
   const {data, subjects, enrolled} = props
-  const [teachers, setTeachers] = useState([])
+  const [subjectData, setSubjectData] = useState(null)
 
   useEffect(() => {
-  }, [subjects, teachers, message, values])
+  }, [subjects, subjectData, message, values])
 
   const handleNoteChange = (e) => {
     const {name, value} = e.target;
@@ -17,28 +17,24 @@ const Modal = (props) => {
 
   const handleChange = (e) => {
     const {name, value} = e.target
-    if (name === "subject") {
-      document.getElementsByName("teacher")[0].options.selectedIndex = 0
-      values.teacher.id = null;
-      fetch(`http://localhost:9999/people/teachers/program/${subjects.find(a => a.id === parseInt(value)).program.id}`)
-      .then(res => res.json())
-      .then(data => setTeachers(data))
-      .catch(err => setMessage(err))
-    }
     values[name].id = parseInt(value);
+    setSubjectData(subjects.find(s => s.id === parseInt(value)))
   }
 
   const handleSubmit = (e) => {
     message = ""
-    if(values.subject.id === null | values.teacher.id === null){
+    console.log(values)
+    if(subjectData === null){
       setMessage("There are unselected fields")
       return null;
     } else {
       if(message === ""){
-        const find = enrolled.find(e => e.student.id === values.student.id && e.subject.id === values.subject.id && e.teacher.id === values.teacher.id)
+        const find = enrolled.find(e => e.student.id === values.student.id && e.courseSubject.id === values.courseSubject.id)
         if (find) {
           setMessage("Is already enrolled")
         } else {
+          values.courseSubject = subjectData
+          console.log(values)
           fetch(`http://localhost:9999/enrolled`, {
             method: 'POST',
             headers: {
@@ -49,10 +45,7 @@ const Modal = (props) => {
           .then(res => res.ok === true && res.json())
           .then(data => {
             if (data) {
-              values.subject.id = null
-              values.teacher.id = null
-              document.getElementsByName("subject")[0].options.selectedIndex = 0
-              document.getElementsByName("teacher")[0].options.selectedIndex = 0
+              setSubjectData(null)
               // eslint-disable-next-line no-undef
               Swal.fire({
                 position: 'top-end',
@@ -107,21 +100,23 @@ const Modal = (props) => {
               (<>
                 <div className="form-outline text-start mb-4">
                   <label className="form-label">Subjects availables</label>
-                  <select name="subject" className="form-select form-select-lg" onChange={handleChange}>
+                  <select name="courseSubject" className="form-select form-select-lg" onChange={handleChange}>
                     <option value={""} selected disabled>Select subject to enroll</option>
-                    {subjects.length !== 0 && subjects.map(({id, name}) => {
-                      return <option value={id}>{name}</option>
+                    {subjects.length !== 0 && subjects.map(s => {
+                      return <option value={s.id}>{s.subject.name}</option>
                     })}
                   </select>                 
                 </div>
                 <div className="form-outline text-start mb-4">
-                  <label className="form-label">Teachers availables</label>
-                  <select name="teacher" className="form-select form-select-lg" onChange={handleChange}>
-                    <option value={""} selected disabled>Select teacher to enroll</option>
-                    {teachers.length !== 0 && teachers.map(({id, names, surnames}) => {
-                      return <option value={id}>{names} {surnames}</option>
-                    })}
-                  </select>                 
+                  <label className="form-label">Subject data</label>
+                  {subjectData !== null && 
+                  <>
+                  <li>PROGRAM: {subjectData.subject.program.name}</li>
+                  <li>TEACHER: {subjectData.teacher.names} {subjectData.teacher.surnames} - {subjectData.teacher.email}</li>
+                  <li>CREDITS: {subjectData.subject.credits}</li>
+                  <li>START DATE: {new Date(subjectData.startDate).toLocaleDateString('es-co', { weekday:"long", year:"numeric", month:"long", day:"numeric"})}</li>
+                  <li>END DATE: {new Date(subjectData.endDate).toLocaleDateString('es-co', { weekday:"long", year:"numeric", month:"long", day:"numeric"})}</li>
+                  </>}               
                 </div>
               </>)
               }
