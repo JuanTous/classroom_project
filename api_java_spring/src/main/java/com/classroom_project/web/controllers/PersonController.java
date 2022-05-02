@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,6 +68,12 @@ public class PersonController {
         return dto != null ? new ResponseEntity<>(dto, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PutMapping("/teachers/{id}")
+    public ResponseEntity<?> editTeacher(@PathVariable("id") Long id, @RequestBody TeacherDTO dto) {
+        dto.setId(id);
+        return new ResponseEntity<>(service.editTeacher(dto), HttpStatus.CREATED);
+    }
+    
     @PostMapping("/teachers")
     public ResponseEntity<?> saveTeacher(@RequestBody Teacher t) {
         return new ResponseEntity<>(service.saveTeacher(t), HttpStatus.CREATED);

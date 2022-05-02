@@ -23,7 +23,7 @@ const Home = () => {
       .then(res => res.json())
       .then(data => setSubjects(data))
       .catch(err => {
-        alert(err)
+        err === 'SyntaxError: Unexpected token < in JSON at position 0' && alert(err)
         navigate("/home")
       })
     }

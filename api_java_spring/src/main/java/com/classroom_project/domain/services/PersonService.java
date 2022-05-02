@@ -70,6 +70,13 @@ public class PersonService {
         return mapperTeacher.toDTOList(repoTeacher.findByProgramId(id));
     }
 
+    public TeacherDTO editTeacher(TeacherDTO dto) {
+        Teacher teacherToEdit = mapperTeacher.toEntity(dto);
+        teacherToEdit.setPassword(repoTeacher.findById(dto.getId()).orElse(null).getPassword());
+        Teacher teacher = repoTeacher.save(teacherToEdit);
+        return mapperTeacher.toDTO(teacher);
+    }
+
     public TeacherDTO saveTeacher(Teacher t) {
         Teacher teacher = repoTeacher.save(t);
         return mapperTeacher.toDTO(teacher);
