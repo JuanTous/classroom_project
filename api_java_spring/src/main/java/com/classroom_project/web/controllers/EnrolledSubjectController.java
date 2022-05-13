@@ -26,8 +26,7 @@ public class EnrolledSubjectController {
     @GetMapping
     public ResponseEntity<List<EnrolledSubjectDTO>> getAll() {
         List<EnrolledSubjectDTO> subjects = service.getAll();
-        return !subjects.isEmpty() ? new ResponseEntity<>(subjects, HttpStatus.OK) 
-        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(subjects, HttpStatus.OK);
     }
 
     @GetMapping("/student/{id}")
@@ -38,7 +37,7 @@ public class EnrolledSubjectController {
 
     @GetMapping("/teacher/{id}")
     public ResponseEntity<List<EnrolledSubjectDTO>> getEnrolledByTeacher(@PathVariable("id") long id) {
-        List<EnrolledSubjectDTO> subjects = service.getByTeacherId(id);
+        List<EnrolledSubjectDTO> subjects = service.getByCourseSubjectTeacherId(id);
         return new ResponseEntity<>(subjects, HttpStatus.OK);
     }
 

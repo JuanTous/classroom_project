@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Student from './dashboards/Student';
 import Teacher from './dashboards/Teacher'
 import Header from './Header';
+import Admin from './dashboards/Admin'
 
 const Home = () => {
   const [subjects, setSubjects] = useState([])
@@ -14,11 +15,15 @@ const Home = () => {
     if (session === null) {
       navigate("/", { state:  "You must log in first"})
     } else {
-      fetch(`http://localhost:9999/subjects/program/${session.program.id}`)
+      let url = ''
+      if (session.profile !== 'Admin') {
+        url = session.profile === 'Teacher' ? `http://localhost:9999/course-subjects/teacher/${session.id}` : `http://localhost:9999/course-subjects/program/${session.program.id}`
+      }
+      session.program && fetch('url')
       .then(res => res.json())
       .then(data => setSubjects(data))
       .catch(err => {
-        alert(err)
+        err === 'SyntaxError: Unexpected token < in JSON at position 0' && alert(err)
         navigate("/home")
       })
     }
@@ -29,7 +34,9 @@ const Home = () => {
     <>
     <Header user={session}/>
       <div className="container mt-5">
-      {session !== null && session.profile === 'Student' ? (<Student user={session} subjects={subjects}/>) : (<Teacher user={session} subjects={subjects}/>)}
+      {session !== null && session.profile === 'Student' ? (<Student user={session} subjects={subjects}/>) : 
+                           session.profile === 'Teacher' ? (<Teacher user={session} subjects={subjects}/>) : 
+                           (<Admin user={session}/>)}
       </div>
       </>
   )

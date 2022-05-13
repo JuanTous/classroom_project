@@ -1,8 +1,10 @@
 package com.classroom_project.web.controllers;
 
+import com.classroom_project.domain.dto.AdminDTO;
 import com.classroom_project.domain.dto.StudentDTO;
 import com.classroom_project.domain.dto.TeacherDTO;
 import com.classroom_project.domain.services.PersonService;
+import com.classroom_project.persistence.entities.Admin;
 import com.classroom_project.persistence.entities.Student;
 import com.classroom_project.persistence.entities.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,6 +68,12 @@ public class PersonController {
         return dto != null ? new ResponseEntity<>(dto, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PutMapping("/teachers/{id}")
+    public ResponseEntity<?> editTeacher(@PathVariable("id") Long id, @RequestBody TeacherDTO dto) {
+        dto.setId(id);
+        return new ResponseEntity<>(service.editTeacher(dto), HttpStatus.CREATED);
+    }
+    
     @PostMapping("/teachers")
     public ResponseEntity<?> saveTeacher(@RequestBody Teacher t) {
         return new ResponseEntity<>(service.saveTeacher(t), HttpStatus.CREATED);
@@ -74,6 +83,29 @@ public class PersonController {
     public ResponseEntity<?> deleteTeacher(@PathVariable("id") Long id) {
         Teacher t = service.deleteTeacher(id);
         return t != null ? new ResponseEntity<Teacher>(t, HttpStatus.OK) : new ResponseEntity<Teacher>(HttpStatus.NOT_FOUND);
+    }
+
+    //-----Admin-----
+    @GetMapping("/admin")
+    public ResponseEntity<?> getAllAdmin() {
+        return new ResponseEntity<>(service.getAllAdmin(), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<?> getAdmin(@PathVariable("id") long id) {
+        AdminDTO dto = service.getAdmin(id);
+        return dto != null ? new ResponseEntity<>(dto, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<?> saveAdmin(@RequestBody Admin a) {
+        return new ResponseEntity<>(service.saveAdmin(a), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<?> deleteAdmin(@PathVariable("id") Long id) {
+        Admin a = service.deleteAdmin(id);
+        return a != null ? new ResponseEntity<Admin>(a, HttpStatus.OK) : new ResponseEntity<Admin>(HttpStatus.NOT_FOUND);
     }
 
     //-----AUTH-----

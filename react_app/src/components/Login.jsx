@@ -43,7 +43,7 @@ const Login = () => {
     .then(data => {
       //console.log(data)
       if (data) {
-        data.profile = data.semester ? "Student" : "Teacher"
+        data.profile = !data.program ? "Admin" : data.semester ? "Student" : "Teacher"
         localStorage.setItem("session", JSON.stringify(data))
         setTimeout(() => {
           navigate("/home")

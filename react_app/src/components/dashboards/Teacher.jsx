@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Modal from '../Modal'
+import Modal from '../modals/Modal'
 
 const Teacher = ({user, subjects}) => {
   const [enrolled, setEnrolled] = useState([])
@@ -11,18 +11,18 @@ const Teacher = ({user, subjects}) => {
     let ids = []
     let grouped = []
     data.forEach(e => {
-      ids.push(e.subject.id)
+      ids.push(e.courseSubject.subject.id)
     })
 
     ids = new Set(ids)
 
     ids.forEach(id => {
-      let enr = data.find(d => d.subject.id === id)
-      grouped.push({id: id, name: enr.subject.name, enrolled: []})
+      let enr = data.find(d => d.courseSubject.subject.id === id)
+      grouped.push({id: id, name: enr.courseSubject.subject.name, enrolled: []})
     })
     grouped.forEach(g => {
       data.forEach(d => {
-        if (g.id === d.subject.id) {
+        if (g.id === d.courseSubject.subject.id) {
           g.enrolled.push(d)
         }
       })
@@ -57,8 +57,7 @@ const Teacher = ({user, subjects}) => {
       .then(res => res.ok === true && res.json())
       .then(data => {
           if (data) {
-            console.log(data)
-              groupSubjects(data)
+            groupSubjects(data)
           } else {
               setErrors("The request to the server has not been found")
           }
@@ -82,7 +81,6 @@ const Teacher = ({user, subjects}) => {
                 <div className="accordion accordion-flush" id="accordionFlushExample">
                 {enrolled.length !== 0 ? 
                 (enrolled.map((e, i) => {
-                    //const {color, average} = getAverage(e.firstScore, e.secondScore, e.thirdScore)
                     return (  
                     <div className="accordion-item">
                         <h2 className="accordion-header" id="flush-headingOne">

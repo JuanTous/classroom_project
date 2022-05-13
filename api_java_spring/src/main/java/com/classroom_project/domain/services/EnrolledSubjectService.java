@@ -23,8 +23,8 @@ public class EnrolledSubjectService {
         return mapper.toDTOList(repository.findByStudentId(id));
     }
 
-    public List<EnrolledSubjectDTO> getByTeacherId(long id) {
-        return mapper.toDTOList(repository.findByTeacherId(id));
+    public List<EnrolledSubjectDTO> getByCourseSubjectTeacherId(long id) {
+        return mapper.toDTOList(repository.findByCourseSubjectTeacherId(id));
     }
 
     public boolean save(EnrolledSubjectDTO dto) {

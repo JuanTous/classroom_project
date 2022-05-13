@@ -7,7 +7,7 @@ import com.classroom_project.persistence.entities.EnrolledSubject;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {ProgramMapper.class})
+@Mapper(componentModel = "spring", uses = {StudentMapper.class, CourseSubjectMapper.class})
 public interface EnrolledSubjectMapper {
     EnrolledSubjectDTO toDTO(EnrolledSubject e);
     @InheritInverseConfiguration
