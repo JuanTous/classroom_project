@@ -51,7 +51,7 @@ const Admin = ({user}) => {
                     <div className="card-body">
                     <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li className="nav-item" role="presentation">
-                            <button className="nav-link active" id="pills-users-tab" data-bs-toggle="pill" data-bs-target="#pills-users" type="button" role="tab" aria-controls="pills-users" aria-selected="true">Users</button>
+                            <button className="nav-link active" id="pills-users-tab" data-bs-toggle="pill" data-bs-target="#pills-users" type="button" role="tab" aria-controls="pills-users" aria-selected="true">Teachers</button>
                         </li>
                         <li className="nav-item" role="presentation">
                             <button className="nav-link" id="pills-subjects-tab" data-bs-toggle="pill" data-bs-target="#pills-subjects" type="button" role="tab" aria-controls="pills-subjects" aria-selected="false">Subjects</button>
