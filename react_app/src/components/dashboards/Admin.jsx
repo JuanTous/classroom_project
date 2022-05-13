@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import AdminModal from '../modals/AdminModal'
+import CourseSubjectCrud from './crud_components/CourseSubjectCrud'
+import ProgramCrud from './crud_components/ProgramCrud'
+import SubjectCrud from './crud_components/SubjectCrud'
 import UserCrud from './crud_components/UserCrud'
-import AdminItems from './crud_components/UserCrud'
 
 const Admin = ({user}) => {
     const [users, setUsers] = useState([])
@@ -57,13 +59,23 @@ const Admin = ({user}) => {
                         <li className="nav-item" role="presentation">
                             <button className="nav-link" id="pills-course-subjects-tab" data-bs-toggle="pill" data-bs-target="#pills-course-subjects" type="button" role="tab" aria-controls="pills-course-subjects" aria-selected="false">Course subjects</button>
                         </li>
+                        <li className="nav-item" role="presentation">
+                            <button className="nav-link" id="pills-programs-tab" data-bs-toggle="pill" data-bs-target="#pills-programs" type="button" role="tab" aria-controls="pills-programs" aria-selected="false">Programs</button>
+                        </li>
                     </ul>
                     <div className="tab-content" id="pills-tabContent">
                         <div className="tab-pane fade show active" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
                             <UserCrud users={users} programs={programs}/>
                         </div>
-                        <div className="tab-pane fade" id="pills-subjects" role="tabpanel" aria-labelledby="pills-subjects-tab">.2.</div>
-                        <div className="tab-pane fade" id="pills-course-subjects" role="tabpanel" aria-labelledby="pills-course-subjects-tab">4</div>
+                        <div className="tab-pane fade" id="pills-subjects" role="tabpanel" aria-labelledby="pills-subjects-tab">
+                            <SubjectCrud subjects={subjects} programs={programs}/>
+                        </div>
+                        <div className="tab-pane fade" id="pills-course-subjects" role="tabpanel" aria-labelledby="pills-course-subjects-tab">
+                            <CourseSubjectCrud courseSubjects={courseSubjects}/>
+                        </div>
+                        <div className="tab-pane fade" id="pills-programs" role="tabpanel" aria-labelledby="pills-programs-tab">
+                            <ProgramCrud programs={programs}/>
+                        </div>
                     </div>
                     </div>
 
