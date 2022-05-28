@@ -65,6 +65,7 @@ export const Register = () => {
         })
         .then(res => res.json())
         .then(data => {
+          data.profile = "Student"
           messages.success.push("The user was successfully registered")
           localStorage.setItem("session", JSON.stringify(data))
           setTimeout(() => {

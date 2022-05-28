@@ -19,7 +19,7 @@ const Home = () => {
       if (session.profile !== 'Admin') {
         url = session.profile === 'Teacher' ? `http://localhost:9999/course-subjects/teacher/${session.id}` : `http://localhost:9999/course-subjects/program/${session.program.id}`
       }
-      session.program && fetch('url')
+      session.program && fetch(url)
       .then(res => res.json())
       .then(data => setSubjects(data))
       .catch(err => {
